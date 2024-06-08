@@ -13,30 +13,32 @@ title = "GameProject"
 window = Window(width, height, fullscreen, title)
 
 # ground info
-size = (100,100)
-ground = Ground(window, Vector(width/2, height/2), Vector(0,0), size, "Green")
+groundSize = (1000,10)
+ground = Ground(window, Vector(0, height - groundSize[1]), Vector(0,0), groundSize, "Green")
 
 # player info
-player = Player(window, Vector(100, height/2), Vector(0,0), size, "Blue")
+playerSize = (50,50)
+player = Player(window, Vector(100, height - 100), Vector(0,0), playerSize, "Blue")
+
 running = True
+# main run loop
 while running:
 
     # input handling
     for event in pygame.event.get():
+        # if quit
         if event.type == pygame.QUIT:
             running = False
 
+        # if keydown
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 player.moveLeft = True
             elif event.key == pygame.K_RIGHT:
                 player.moveRight = True
 
-            elif event.key == pygame.K_UP:
-                player.moveUp = True
-
-            elif event.key == pygame.K_DOWN:
-                player.moveDown = True
+            elif event.key == pygame.K_SPACE:
+                player.doJump = True
 
             else:
                 pass
@@ -49,11 +51,9 @@ while running:
             elif event.key == pygame.K_RIGHT:
                 player.moveRight = False
 
-            elif event.key == pygame.K_UP:
-                player.moveUp = False
+            elif event.key == pygame.K_SPACE:
+                player.doJump = False
 
-            elif event.key == pygame.K_DOWN:
-                player.moveDown = False
             else:
                 pass
 
@@ -61,8 +61,10 @@ while running:
     # object updating
     dt = window.getDt()
     player.update(dt)
-    if player.hit(ground):
-        player.pos.y = ground.pos.y
+
+    # object logic
+    if player.hit(ground) == "top":
+        player.pos.y = ground.pos.y - player.height
 
     # object drawing
     window.clear()
