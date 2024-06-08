@@ -96,7 +96,7 @@ class Player:
         self.velocity = velocity # Vector(100,100)
         self.width,self.height = size
         self.color = color
-        self.gravity = Vector(0,0.95)
+        self.gravity = Vector(0,1.5)
         self.onGround = False
 
         # used for continued movement when button pressed once

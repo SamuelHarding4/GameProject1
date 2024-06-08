@@ -4,16 +4,23 @@ from engine import *
 pygame.init()
 
 #base window details
-width = 1000
+useScreen = False
+width = 2000
 height = 1000
+screenWidth, screenHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
 fullscreen = 0 # 0  for defined width and height, pygame.FULLSCREEN for fullscreen
 title = "GameProject"
 
 #window handling
 window = Window(width, height, fullscreen, title)
+if useScreen:
+    window = Window(screenWidth, screenHeight, pygame.FULLSCREEN, "Practice project")
+    width = screenWidth
+    height = screenHeight
+
 
 # ground info
-groundSize = (1000,10)
+groundSize = (width,10)
 ground = Ground(window, Vector(0, height - groundSize[1]), Vector(0,0), groundSize, "Green")
 
 # player info
