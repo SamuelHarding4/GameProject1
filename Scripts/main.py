@@ -54,6 +54,12 @@ while running:
             elif event.key == pygame.K_SPACE:
                 player.doJump = True
 
+            elif event.key == pygame.K_DOWN:
+                player.moveDown = True
+
+            elif event.key == pygame.K_UP:
+                player.moveUp = True
+
             else:
                 pass
 
@@ -68,6 +74,12 @@ while running:
             elif event.key == pygame.K_SPACE:
                 player.doJump = False
 
+            elif event.key == pygame.K_DOWN:
+                player.moveDown = False
+
+            elif event.key == pygame.K_UP:
+                player.moveUp = False
+
             else:
                 pass
 
@@ -77,7 +89,7 @@ while running:
     player.update(dt)
 
     # object logic
-    if player.hit(ground) == "top":
+    if player.hit(ground):
         player.pos.y = ground.pos.y - player.height
 
     if player.hit(ladder):

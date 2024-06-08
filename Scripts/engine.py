@@ -105,6 +105,8 @@ class Player:
         self.moveLeft = False
         self.moveRight = False
         self.doJump = False
+        self.moveUp = False
+        self.moveDown = False
 
     def update(self, dt):
         """
@@ -124,6 +126,13 @@ class Player:
 
         if self.onLadder:
             self.forceGravity = False
+            if self.moveDown:
+                self.velocity.y += 200
+
+            if self.moveUp:
+                self.velocity.y -= 200
+            else:
+                pass
         else:
             self.forceGravity = True
 
@@ -178,13 +187,16 @@ class Player:
                 return "left"
             elif self_left < obj_right < self_right:
                 return "right"
+            else:
+                pass
         else:
             self.onLadder = False
         return False
 
     def jump(self):
-        if self.onGround:
+        if self.onGround or self.onLadder:
             self.velocity.y = -700
+            self.onGround = False
 
 class Ladder:
     def __init__(self, window: "Window", pos: "Vector", velocity: "Vector", size: (int, int), color: str):
