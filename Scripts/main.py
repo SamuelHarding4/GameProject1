@@ -30,6 +30,10 @@ player = Player(window, Vector(100, height - 100), Vector(0,0), playerSize, "Blu
 ladderSize = (100,200)
 ladder = Ladder(window, Vector(200, height - 300), Vector(0,0), ladderSize, "Yellow")
 
+# turrent info
+turretSize = (100,100)
+turret = Turret(window, Vector(width - 300, height - 300), Vector(0,0), turretSize, "Black")
+
 running = True
 # main run loop
 while running:
@@ -88,9 +92,17 @@ while running:
     dt = window.getDt()
     player.update(dt)
 
+    turret.shoot()
+    for bullet in turret.bullets:
+        bullet.update(dt)
+        if bullet.pos.x < 0:
+            turret.bullets.remove(bullet)
+
+
     # object logic
     if player.hit(ground):
         player.pos.y = ground.pos.y - player.height
+        player.velocity = Vector(0,0)
 
     if player.hit(ladder):
         pass
@@ -99,7 +111,9 @@ while running:
     window.clear()
     ground.draw()
     ladder.draw()
+    turret.draw()
+    for bullet in turret.bullets:
+        bullet.draw()
     player.draw()
-
     window.swapBuffers()
 pygame.quit()

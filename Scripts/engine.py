@@ -102,6 +102,7 @@ class Player:
         self.onLadder = False
 
         # used for continued movement when button pressed once
+        self.speed = 500
         self.moveLeft = False
         self.moveRight = False
         self.doJump = False
@@ -116,10 +117,10 @@ class Player:
         """
 
         if self.moveLeft:
-            self.velocity.x -= 100
+            self.velocity.x = -self.speed
 
         if self.moveRight:
-            self.velocity.x += 100
+            self.velocity.x = self.speed
 
         if self.doJump:
             self.jump()
@@ -127,10 +128,10 @@ class Player:
         if self.onLadder:
             self.forceGravity = False
             if self.moveDown:
-                self.velocity.y += 200
+                self.velocity.y = self.speed
 
             if self.moveUp:
-                self.velocity.y -= 200
+                self.velocity.y = -self.speed
             else:
                 pass
         else:
@@ -138,7 +139,7 @@ class Player:
 
         if self.forceGravity:
             self.velocity += self.gravity  # adds gravity to velocity
-        self.velocity.x *= 0.9  # slows down the velocity if the button is not pressed
+        self.velocity.x = self.velocity.x * 0.95  # slows down the velocity if the button is not pressed
         self.pos += self.velocity * dt  # adds velocity to the position
 
     def draw(self):
@@ -201,13 +202,13 @@ class Player:
 class Ladder:
     def __init__(self, window: "Window", pos: "Vector", velocity: "Vector", size: (int, int), color: str):
         """
-        class for ground obstacle
+        class for ladder obstacle
 
         :param window: which window to draw it to
-        :param pos: position of the ground on the window
-        :param velocity: velocity of the ground
-        :param size: size of the ground
-        :param color: color of the ground
+        :param pos: position of the ladder on the window
+        :param velocity: velocity of the ladder
+        :param size: size of the ladder
+        :param color: color of the ladder
         """
         # window object
         self.window = window
@@ -220,6 +221,72 @@ class Ladder:
 
     def draw(self):
         """
+        draws a rectangle with the ladder obstacle properties
+        """
+        pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
+
+
+class Turret:
+    def __init__(self, window: "Window", pos: "Vector", velocity: "Vector", size: (int, int), color: str):
+        """
+        class for ground obstacle
+
+        :param window: which window to draw it to
+        :param pos: position of the turret on the window
+        :param velocity: velocity of the turret
+        :param size: size of the turret
+        :param color: color of the turret
+        """
+        # window object
+        self.window = window
+        # windowSurface actually the drawable canvas
+        self.windowSurface = window.window
+        self.pos = pos # Vector(100,100)
+        self.velocity = velocity
+        self.width,self.height = size # decomposes (100,100) into different variables
+        self.color = color
+        self.bullets = []
+        self.lastTime = time.time()
+
+    def draw(self):
+        """
         draws a rectangle with the ground obstacle properties
         """
         pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
+
+    def shoot(self):
+        if time.time() - self.lastTime > 2:
+            bulletSize = (20,20)
+            bullet = turretBullet(self.window, Vector(self.pos.x, self.pos.y + self.height / 2), Vector(-100,0), bulletSize, "White")
+            self.bullets.append(bullet)
+            self.lastTime = time.time()
+
+
+class turretBullet:
+    def __init__(self, window: "Window", pos: "Vector", velocity: "Vector", size: (int, int), color: str):
+        """
+        class for bullet obstacle
+
+        :param window: which window to draw it to
+        :param pos: position of the bullet on the window
+        :param velocity: velocity of the bullet
+        :param size: size of the bullet
+        :param color: color of the bullet
+        """
+        # window object
+        self.window = window
+        # windowSurface actually the drawable canvas
+        self.windowSurface = window.window
+        self.pos = pos # Vector(100,100)
+        self.velocity = velocity
+        self.width,self.height = size # decomposes (100,100) into different variables
+        self.color = color
+
+    def draw(self):
+        """
+        draws a rectangle with the bullet obstacle properties
+        """
+        pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
+
+    def update(self,dt):
+        self.pos += self.velocity * dt  # adds velocity to the position
