@@ -28,21 +28,22 @@ while running:
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                player.velocity.x -= 1
+                player.velocity.x -= 100
             elif event.key == pygame.K_RIGHT:
-                player.velocity.x += 1
+                player.velocity.x += 100
 
         # if keyup
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                player.velocity.x += 1
+                player.velocity.x += 100
 
             elif event.key == pygame.K_RIGHT:
-                player.velocity.x -= 1
+                player.velocity.x -= 100
 
 
     # object updating
-    player.update()
+    dt = window.getDt()
+    player.update(dt)
 
     # object drawing
     window.clear()

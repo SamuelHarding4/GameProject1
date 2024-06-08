@@ -1,5 +1,6 @@
 import pygame
 from vector import *
+import time
 
 class Window:
     def __init__(self, width : int, height : int, fullscreen , title : str):
@@ -7,6 +8,7 @@ class Window:
         self.height = height
         self.fullscreen = fullscreen
         self.title = title
+        self.previousTime = time.time()
 
         # makes the pygame window
         self.window = pygame.display.set_mode((width,height), fullscreen)
@@ -18,6 +20,12 @@ class Window:
     def clear(self):
         # pygame window referenced
         self.window.fill("DarkGreen")
+
+    def getDt(self):
+        currentTime = time.time()
+        dt = currentTime - self.previousTime
+        self.previousTime = currentTime
+        return dt
 
 class Ground:
     def __init__(self, window, pos, velocity, size, color):
@@ -44,8 +52,8 @@ class Player:
         self.width,self.height = size
         self.color = color
 
-    def update(self):
-        self.pos += self.velocity
+    def update(self, dt):
+        self.pos += self.velocity * dt
 
     def draw(self):
         pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
