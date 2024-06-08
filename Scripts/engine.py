@@ -32,3 +32,20 @@ class Ground:
 
     def draw(self):
         pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
+
+class Player:
+    def __init__(self, window, pos, velocity, size, color):
+        # window object
+        self.window = window
+        # windowSurface actually the drawable canvas
+        self.windowSurface = window.window
+        self.pos = pos # Vector(100,100)
+        self.velocity = velocity # Vector(100,100)
+        self.width,self.height = size
+        self.color = color
+
+    def update(self):
+        self.pos += self.velocity
+
+    def draw(self):
+        pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
