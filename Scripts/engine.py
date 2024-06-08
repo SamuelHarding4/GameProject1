@@ -139,7 +139,7 @@ class Player:
 
         if self.forceGravity:
             self.velocity += self.gravity  # adds gravity to velocity
-        self.velocity.x = self.velocity.x * 0.95  # slows down the velocity if the button is not pressed
+        self.velocity.x = self.velocity.x * 0.99  # slows down the velocity if the button is not pressed
         self.pos += self.velocity * dt  # adds velocity to the position
 
     def draw(self):

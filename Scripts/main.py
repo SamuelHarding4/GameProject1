@@ -92,14 +92,19 @@ while running:
     dt = window.getDt()
     player.update(dt)
 
+    # object logic
     turret.shoot()
     for bullet in turret.bullets:
         bullet.update(dt)
         if bullet.pos.x < 0:
             turret.bullets.remove(bullet)
 
+        if player.hit(bullet):
+            player.moveLeft = False
+            player.moveRight = False
+            turret.bullets.remove(bullet)
+            player.velocity += Vector(bullet.velocity.x * 10, -200)
 
-    # object logic
     if player.hit(ground):
         player.pos.y = ground.pos.y - player.height
         player.velocity = Vector(0,0)
