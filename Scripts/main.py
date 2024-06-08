@@ -4,15 +4,14 @@ from engine import *
 pygame.init()
 
 #base window details
-useScreen = False
+useScreen = False # change to use fullscreen
 width = 2000
 height = 1000
 screenWidth, screenHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
-fullscreen = 0 # 0  for defined width and height, pygame.FULLSCREEN for fullscreen
 title = "GameProject"
 
 #window handling
-window = Window(width, height, fullscreen, title)
+window = Window(width, height, 0, title)
 if useScreen:
     window = Window(screenWidth, screenHeight, pygame.FULLSCREEN, "Practice project")
     width = screenWidth
@@ -27,6 +26,10 @@ ground = Ground(window, Vector(0, height - groundSize[1]), Vector(0,0), groundSi
 playerSize = (50,50)
 player = Player(window, Vector(100, height - 100), Vector(0,0), playerSize, "Blue")
 
+# ladder info
+ladderSize = (100,200)
+ladder = Ladder(window, Vector(200, height - 300), Vector(0,0), ladderSize, "Yellow")
+
 running = True
 # main run loop
 while running:
@@ -39,6 +42,10 @@ while running:
 
         # if keydown
         elif event.type == pygame.KEYDOWN:
+
+            if event.key == pygame.K_q:
+                running = False
+
             if event.key == pygame.K_LEFT:
                 player.moveLeft = True
             elif event.key == pygame.K_RIGHT:
@@ -73,9 +80,13 @@ while running:
     if player.hit(ground) == "top":
         player.pos.y = ground.pos.y - player.height
 
+    if player.hit(ladder):
+        pass
+
     # object drawing
     window.clear()
     ground.draw()
+    ladder.draw()
     player.draw()
 
     window.swapBuffers()

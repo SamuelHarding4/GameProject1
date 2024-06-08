@@ -97,7 +97,9 @@ class Player:
         self.width,self.height = size
         self.color = color
         self.gravity = Vector(0,1.5)
+        self.forceGravity = True
         self.onGround = False
+        self.onLadder = False
 
         # used for continued movement when button pressed once
         self.moveLeft = False
@@ -120,7 +122,13 @@ class Player:
         if self.doJump:
             self.jump()
 
-        self.velocity += self.gravity  # adds gravity to velocity
+        if self.onLadder:
+            self.forceGravity = False
+        else:
+            self.forceGravity = True
+
+        if self.forceGravity:
+            self.velocity += self.gravity  # adds gravity to velocity
         self.velocity.x *= 0.9  # slows down the velocity if the button is not pressed
         self.pos += self.velocity * dt  # adds velocity to the position
 
@@ -152,9 +160,17 @@ class Player:
 
         # Check for collision
         if self_right > obj_left and self_left < obj_right and self_bottom > obj_top and self_top < obj_bottom:
+
+            # check if on ladder or ground
+            if isinstance(obstacle, Ladder):
+                self.onLadder = True
+                self.velocity = Vector(0,0)
+
+            if isinstance(obstacle, Ground):
+                self.onGround = True
+
             # Determine the side of the collision
             if self_bottom > obj_top > self_top:
-                self.onGround = True
                 return "top"
             elif self_top < obj_bottom < self_bottom:
                 return "bottom"
@@ -162,9 +178,36 @@ class Player:
                 return "left"
             elif self_left < obj_right < self_right:
                 return "right"
+        else:
+            self.onLadder = False
         return False
 
     def jump(self):
         if self.onGround:
             self.velocity.y = -700
-            self.onGround = False
+
+class Ladder:
+    def __init__(self, window: "Window", pos: "Vector", velocity: "Vector", size: (int, int), color: str):
+        """
+        class for ground obstacle
+
+        :param window: which window to draw it to
+        :param pos: position of the ground on the window
+        :param velocity: velocity of the ground
+        :param size: size of the ground
+        :param color: color of the ground
+        """
+        # window object
+        self.window = window
+        # windowSurface actually the drawable canvas
+        self.windowSurface = window.window
+        self.pos = pos # Vector(100,100)
+        self.velocity = velocity
+        self.width,self.height = size #decomposes (100,100) into different variables
+        self.color = color
+
+    def draw(self):
+        """
+        draws a rectangle with the ground obstacle properties
+        """
+        pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
