@@ -12,6 +12,10 @@ title = "GameProject"
 #window handling
 window = Window(width, height, fullscreen, title)
 
+# ground information
+size = (100,100)
+ground = Ground(window, Vector(width/2, height/2), Vector(0,0), size, "Green")
+
 running = True
 while running:
 
@@ -24,5 +28,8 @@ while running:
 
     # object drawing
     window.clear()
+    ground.draw()
+
+
     window.swapBuffers()
 pygame.quit()
