@@ -51,10 +51,27 @@ class Player:
         self.velocity = velocity # Vector(100,100)
         self.width,self.height = size
         self.color = color
-        self.gravity = 0.8
+        self.gravity = Vector(0,9.8)
+        self.moveLeft = False
+        self.moveRight = False
+        self.moveDown = False
+        self.moveUp = False
 
     def update(self, dt):
-        self.pos += self.velocity * dt * self.gravity
+        if self.moveLeft == True:
+            self.velocity.x -= 100
+
+        if self.moveRight == True:
+            self.velocity.x += 100
+
+        if self.moveUp == True:
+            self.velocity.y -= 100
+
+        if self.moveDown == True:
+            self.velocity.y += 100
+        self.velocity += self.gravity
+        self.velocity *= 0.9
+        self.pos += self.velocity * dt
 
     def draw(self):
         pygame.draw.rect(self.windowSurface, self.color, (self.pos.x, self.pos.y, self.width, self.height))
@@ -65,4 +82,5 @@ class Player:
             (self.pos.x + self.width > object.pos.x and self.pos.x + self.width < object.pos.x + object.width)) and \
                 ((self.pos.y > object.pos.y and self.pos.y < object.pos.y + self.height) or \
             (self.pos.y + self.height > object.pos.y and self.pos.y + self.height < object.pos.y + object.height)):
-            print("hit")
+            return True
+        return False

@@ -28,15 +28,15 @@ while running:
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                player.velocity.x -= 100
+                player.moveLeft = True
             elif event.key == pygame.K_RIGHT:
-                player.velocity.x += 100
+                player.moveRight = True
 
             elif event.key == pygame.K_UP:
-                player.velocity.y -= 100
+                player.moveUp = True
 
             elif event.key == pygame.K_DOWN:
-                player.velocity.y += 100
+                player.moveDown = True
 
             else:
                 pass
@@ -44,16 +44,16 @@ while running:
         # if keyup
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                player.velocity.x += 100
+                player.moveLeft = False
 
             elif event.key == pygame.K_RIGHT:
-                player.velocity.x -= 100
+                player.moveRight = False
 
             elif event.key == pygame.K_UP:
-                player.velocity.y += 100
+                player.moveUp = False
 
             elif event.key == pygame.K_DOWN:
-                player.velocity.y -= 100
+                player.moveDown = False
             else:
                 pass
 
@@ -61,7 +61,8 @@ while running:
     # object updating
     dt = window.getDt()
     player.update(dt)
-    player.hit(ground)
+    if player.hit(ground):
+        player.pos.y = ground.pos.y
 
     # object drawing
     window.clear()
