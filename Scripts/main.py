@@ -14,9 +14,15 @@ window = Window(width, height, fullscreen, title)
 
 running = True
 while running:
+
+    # input handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+    # object updating
 
+    # object drawing
+    window.clear()
+    window.swapBuffers()
 pygame.quit()
